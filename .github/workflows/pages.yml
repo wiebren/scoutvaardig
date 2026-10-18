@@ -1,32 +1,117 @@
-# Publishes the home page of scoutvaardig.nl with GitHub Pages: every push to main. This is the user site
-# (wiebren.github.io): its custom domain is also the domain of every project site, so the apps come at
-# scoutvaardig.nl/lelievlet/ and /scoutingtechnieken/.
+# Publishes scoutvaardig.nl with GitHub Pages: the home page, and a copy of both apps beside it - Lelievlet 3D in
+# lelievlet/, Scoutingtechnieken in scoutingtechnieken/. Each app publishes itself as well, from its own repository
+# (wiebren.github.io/lelievlet/, /scoutingtechnieken/), where the installs from before the move get their updates and
+# then move on (verhuizen.js in each app). Both addresses serve the same build of the same commit: the one the app's
+# own Pages run last published, so a commit that fails there never gets here either.
+#
+# When: every push here, by hand, and every 15 minutes a look whether an app published something new since
+# (versies.json on the site says which commits it has). See README.md, "Bijwerken".
 name: Pages
 
 on:
   push:
     branches: [main]
   workflow_dispatch:
+  repository_dispatch:
+    types: [app-gepubliceerd]
+  schedule:
+    - cron: '7,22,37,52 * * * *'
 
 permissions:
   contents: read
   pages: write
   id-token: write
-
-concurrency:
-  group: pages
-  cancel-in-progress: true
+  actions: read
 
 jobs:
-  deploy:
+  # which commit of each app its own Pages run last published, and whether the site already has it
+  kijk:
     runs-on: ubuntu-latest
+    outputs:
+      lelievlet: ${{ steps.versies.outputs.lelievlet }}
+      scoutingtechnieken: ${{ steps.versies.outputs.scoutingtechnieken }}
+      nodig: ${{ steps.versies.outputs.nodig }}
+    steps:
+      - id: versies
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gepubliceerd() {
+            gh api "repos/wiebren/$1/actions/workflows/pages.yml/runs?branch=main&status=success&per_page=1" --jq '.workflow_runs[0].head_sha'
+          }
+          lv=$(gepubliceerd lelievlet)
+          st=$(gepubliceerd scoutingtechnieken)
+          echo "lelievlet=$lv" >> "$GITHUB_OUTPUT"
+          echo "scoutingtechnieken=$st" >> "$GITHUB_OUTPUT"
+          online=$(curl -fsS https://scoutvaardig.nl/versies.json || echo '{}')
+          if [ "${{ github.event_name }}" != schedule ] \
+            || [ "$(jq -r .lelievlet <<< "$online")" != "$lv" ] \
+            || [ "$(jq -r .scoutingtechnieken <<< "$online")" != "$st" ]; then
+            echo nodig=ja >> "$GITHUB_OUTPUT"
+          fi
+          echo "lelievlet $lv, scoutingtechnieken $st; online: $online"
+
+  build:
+    needs: kijk
+    if: needs.kijk.outputs.nodig == 'ja'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/checkout@v4
+        with:
+          repository: wiebren/lelievlet
+          ref: ${{ needs.kijk.outputs.lelievlet }}
+          path: apps/lelievlet
+
+      - uses: actions/checkout@v4
+        with:
+          repository: wiebren/scoutingtechnieken
+          ref: ${{ needs.kijk.outputs.scoutingtechnieken }}
+          path: apps/scoutingtechnieken
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+          cache-dependency-path: |
+            apps/lelievlet/web/pnpm-lock.yaml
+            apps/scoutingtechnieken/web/pnpm-lock.yaml
+
+      # the same builds as in the apps' own workflows
+      - name: Lelievlet 3D
+        working-directory: apps/lelievlet/web
+        run: pnpm install --frozen-lockfile && pnpm build:lib
+
+      - name: Scoutingtechnieken
+        working-directory: apps/scoutingtechnieken/web
+        run: pnpm install --frozen-lockfile && pnpm build:pages
+
+      - name: Site
+        run: |
+          mkdir _site
+          cp -r index.html img .nojekyll _site/
+          cp -r apps/lelievlet/web/dist-lib _site/lelievlet
+          cp -r apps/scoutingtechnieken/web/pages _site/scoutingtechnieken
+          printf '{"lelievlet":"%s","scoutingtechnieken":"%s"}\n' \
+            "${{ needs.kijk.outputs.lelievlet }}" "${{ needs.kijk.outputs.scoutingtechnieken }}" > _site/versies.json
+
+      - uses: actions/upload-pages-artifact@v3
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    # one deployment at a time; a run already going is left to finish
+    concurrency:
+      group: pages
+      cancel-in-progress: false
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
-      - uses: actions/checkout@v4
-      - name: Site
-        run: mkdir _site && cp -r index.html img .nojekyll _site/ && if [ -f CNAME ]; then cp CNAME _site/; fi
-      - uses: actions/upload-pages-artifact@v3
       - id: deployment
         uses: actions/deploy-pages@v4
