@@ -34,4 +34,4 @@ Lokaal bekijken: `python3 -m http.server` in deze map, en dan <http://localhost:
 ## Licentie
 
 © 2026 Wiebren Braakman, onder [CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/deed.nl), net als
-de apps. Geen apps van Scouting Nederland: een eigen project, gemaakt voor scouts en leiding.
+de apps.
