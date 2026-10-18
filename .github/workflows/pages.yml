@@ -1,8 +1,8 @@
 # Publishes scoutvaardig.nl with GitHub Pages: the home page, and a copy of both apps beside it - Lelievlet 3D in
-# lelievlet/, Scoutingtechnieken in scoutingtechnieken/. Each app publishes itself as well, from its own repository
-# (wiebren.github.io/lelievlet/, /scoutingtechnieken/), where the installs from before the move get their updates and
-# then move on (verhuizen.js in each app). Both addresses serve the same build of the same commit: the one the app's
-# own Pages run last published, so a commit that fails there never gets here either.
+# lelievlet/, Scoutingtechnieken in scoutingtechnieken/. Each is the commit the app's own Pages workflow last passed,
+# so a commit that fails there never gets here either. Lelievlet 3D publishes itself as well
+# (wiebren.github.io/lelievlet/), the same build: the installs from before the move get their updates there and then
+# move on (demo/verhuizen.js). Scoutingtechnieken only sends its old address on to this one.
 #
 # When: every push here, by hand, and every 15 minutes a look whether an app published something new since
 # (versies.json on the site says which commits it has). See README.md, "Bijwerken".

@@ -12,21 +12,23 @@ en komt in `lelievlet/` en `scoutingtechnieken/`.
 
 ## Twee adressen
 
-De apps publiceren zichzelf ook nog, elk vanuit hun eigen repository, op `wiebren.github.io/lelievlet/` en
-`wiebren.github.io/scoutingtechnieken/`: daar stonden ze tot oktober 2026. Een app die vanaf dat adres is
-geïnstalleerd, krijgt daar zijn updates en verhuist dan (`verhuizen.js` in elke app): een browsertab gaat meteen
-naar dezelfde pagina hier, een geïnstalleerde app vraagt het eerst. Wat de app op het apparaat bewaart, gaat mee
-achter de `#`. Een eigen domein voor de *user site* (`wiebren.github.io`) zou ook gelden voor de apps, en dan stuurt
-GitHub het oude adres door; daar kan een service worker niet langs, en de geïnstalleerde apps zouden geen update meer
-krijgen. Daarom heeft het domein een eigen repository, en heet deze niet `wiebren.github.io`.
+Lelievlet 3D publiceert zichzelf ook nog vanuit zijn eigen repository, op `wiebren.github.io/lelievlet/`: daar stond
+hij tot oktober 2026. Een app die vanaf dat adres is geïnstalleerd, krijgt daar zijn updates en verhuist dan
+(`web/demo/verhuizen.js`): een browsertab gaat meteen naar dezelfde pagina hier, een geïnstalleerde app vraagt het
+eerst. Wat de app op het apparaat bewaart, gaat mee achter de `#`. Een eigen domein voor de *user site*
+(`wiebren.github.io`) zou ook gelden voor de apps, en dan stuurt GitHub het oude adres door; daar kan een service
+worker niet langs, en de geïnstalleerde apps zouden geen update meer krijgen. Daarom heeft het domein een eigen
+repository, en heet deze niet `wiebren.github.io`.
 
-Als de oude installaties verhuisd zijn, kan het oude adres gewoon doorsturen: de apps zetten dan zelf
-`scoutvaardig.nl` in *Settings → Pages* (of deze repository heet weer `wiebren.github.io`).
+Scoutingtechnieken was net uit en had geen installaties van het oude adres: op `wiebren.github.io/scoutingtechnieken/`
+staat alleen een pagina die naar hetzelfde adres hier doorstuurt (`.github/doorsturen.html` in die repository).
+
+Als de oude installaties van Lelievlet 3D verhuisd zijn, kan zijn oude adres ook zo doorsturen.
 
 ## Bijwerken
 
-Hier staat dezelfde versie als op het oude adres: de commit die de Pages-workflow van de app als laatste met succes
-heeft gepubliceerd. `versies.json` op de site zegt welke dat zijn. Elke 15 minuten kijkt de workflow of een app iets
+Van elke app staat hier de commit die de Pages-workflow van de app als laatste met succes heeft gedraaid (bij
+Lelievlet 3D dezelfde versie als op het oude adres). `versies.json` op de site zegt welke dat zijn. Elke 15 minuten kijkt de workflow of een app iets
 nieuws heeft gepubliceerd, en bouwt dan opnieuw; met de hand kan het ook (*Actions → Pages → Run workflow*).
 
 Sneller, zonder te wachten: laat de app na zijn eigen publicatie een `repository_dispatch` (`app-gepubliceerd`) naar
