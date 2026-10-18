@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="nl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Scoutvaardig</title>
+  <meta name="description" content="Apps om scoutingtechnieken te leren: Lelievlet 3D voor op het water, Scoutingtechnieken voor op het land.">
+  <meta name="theme-color" content="#0b5cad">
+  <link rel="icon" type="image/svg+xml" href="img/scoutvaardig.svg">
+  <style>
+    :root {
+      --water: #0b5cad;          /* the accent of Lelievlet 3D */
+      --water-licht: #cfe3f1;
+      --water-bleek: #f4f7f9;
+      --land: #00803f;           /* the green of Scoutingtechnieken */
+      --land-licht: #dcefe3;
+      --land-bleek: #f5f9f6;
+      --tekst: #16222e;
+      --stil: #5b6b7a;
+      --kaart: rgba(255, 255, 255, 0.86);
+      --lijn: rgba(22, 34, 46, 0.12);
+      color-scheme: light dark;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --water: #7db4ec;
+        --water-licht: #0d2238;
+        --water-bleek: #13304d;
+        --land: #6fcf97;
+        --land-licht: #0e2618;
+        --land-bleek: #163a25;
+        --tekst: #e8eef3;
+        --stil: #a3b2bf;
+        --kaart: rgba(10, 18, 26, 0.72);
+        --lijn: rgba(232, 238, 243, 0.14);
+      }
+    }
+    * { box-sizing: border-box; }
+    html, body { margin: 0; height: 100%; }
+    body {
+      font: 16px/1.5 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+      color: var(--tekst);
+      background: var(--water-bleek);
+      display: flex; flex-direction: column; min-height: 100dvh;
+    }
+
+    /* the name, over both halves */
+    .kop {
+      position: absolute; inset: 0 0 auto; z-index: 2; pointer-events: none;
+      display: flex; flex-direction: column; align-items: center; text-align: center;
+      padding: calc(env(safe-area-inset-top) + 28px) 16px 0;
+    }
+    .kop h1 { margin: 0; font-size: clamp(30px, 5vw, 46px); font-weight: 800; letter-spacing: -0.02em; line-height: 1.1; }
+    .kop h1 span:first-child { color: var(--land); }
+    .kop h1 span:last-child { color: var(--water); }
+    .kop p { margin: 6px 0 0; color: var(--stil); font-size: 16px; max-width: 34em; }
+
+    /* the two halves: water left, land right; stacked on a phone */
+    .helften { flex: 1; display: flex; }
+    .helft {
+      position: relative; flex: 1 1 50%; min-height: 100%;
+      display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 14px;
+      padding: 150px 28px 56px; text-align: center; color: inherit; text-decoration: none;
+      transition: flex-grow 0.35s ease;
+    }
+    .water { background: linear-gradient(180deg, var(--water-licht), var(--water-bleek)); }
+    .land { background: linear-gradient(180deg, var(--land-licht), var(--land-bleek)); border-left: 1px solid var(--lijn); }
+    @media (hover: hover) and (min-width: 760px) {
+      .helft.actief:hover { flex-grow: 1.25; }
+    }
+
+    .soort { font-size: 13px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; }
+    .water .soort { color: var(--water); }
+    .land .soort { color: var(--land); }
+    .beeld { width: min(240px, 46vw); height: auto; aspect-ratio: 1; border-radius: 22%; box-shadow: 0 12px 32px rgba(11, 40, 70, 0.18); }
+    .helft h2 { margin: 4px 0 0; font-size: clamp(26px, 3.4vw, 34px); line-height: 1.15; }
+    .helft p { margin: 0; max-width: 26em; color: var(--stil); }
+    .knop {
+      display: inline-flex; align-items: center; gap: 8px; margin-top: 6px; padding: 12px 22px; border-radius: 999px;
+      font-weight: 700; background: var(--water); color: #fff;
+    }
+    @media (prefers-color-scheme: dark) { .knop { color: #0d2238; } }
+    .helft.actief:hover .knop, .helft.actief:focus-visible .knop { filter: brightness(1.08); }
+    .helft.actief:focus-visible { outline: 3px solid var(--water); outline-offset: -6px; }
+    .label {
+      display: inline-block; margin-top: 6px; padding: 8px 18px; border-radius: 999px; font-weight: 700;
+      border: 2px dashed var(--land); color: var(--land);
+    }
+    .land .beeld { opacity: 0.85; }
+
+    .voet {
+      padding: 14px 16px calc(env(safe-area-inset-bottom) + 14px); text-align: center; font-size: 13px; color: var(--stil);
+      background: var(--kaart); border-top: 1px solid var(--lijn);
+    }
+    .voet a { color: inherit; }
+
+    @media (max-width: 759px) {
+      .helften { flex-direction: column; }
+      .helft { flex: 0 0 auto; min-height: 0; gap: 10px; padding: 24px 16px 28px; }
+      .water { padding-top: 136px; }
+      .land { flex-grow: 1; justify-content: flex-start; }
+      .land { border-left: 0; border-top: 1px solid var(--lijn); }
+      .beeld { width: min(132px, 36vw); }
+    }
+  </style>
+</head>
+<body>
+  <header class="kop">
+    <h1><span>Scout</span><span>vaardig</span></h1>
+    <p>Apps om scoutingtechnieken te leren. Ze werken op je telefoon, ook zonder internet.</p>
+  </header>
+
+  <main class="helften">
+    <a class="helft water actief" href="lelievlet/">
+      <span class="soort">Water</span>
+      <img class="beeld" src="img/lelievlet.png" alt="" width="320" height="320">
+      <h2>Lelievlet 3D</h2>
+      <p>De lelievlet in 3D. Leer de onderdelen, bekijk hoe de manoeuvres gaan en oefen ze stap voor stap.</p>
+      <span class="knop">Open Lelievlet 3D <span aria-hidden="true">→</span></span>
+    </a>
+
+    <section class="helft land" aria-labelledby="land-naam">
+      <span class="soort">Land</span>
+      <img class="beeld" src="img/scoutingtechnieken.svg" alt="" width="320" height="320">
+      <h2 id="land-naam">Scoutingtechnieken</h2>
+      <p>Knopen, sjorren, kaart en kompas, tochttechnieken, seinen, vuur en kamperen: opzoeken, leren en oefenen.</p>
+      <span class="label">Binnenkort</span>
+    </section>
+  </main>
+
+  <footer class="voet">
+    © 2026 Wiebren Braakman, onder <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.nl">CC BY-NC-SA 4.0</a>.
+    Geen apps van Scouting Nederland: een eigen project, gemaakt voor scouts en leiding.
+  </footer>
+</body>
+</html>
