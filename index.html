@@ -73,13 +73,16 @@
     .beeld { width: min(240px, 46vw); height: auto; aspect-ratio: 1; border-radius: 22%; box-shadow: 0 12px 32px rgba(11, 40, 70, 0.18); }
     .helft h2 { margin: 4px 0 0; font-size: clamp(26px, 3.4vw, 34px); line-height: 1.15; }
     .helft p { margin: 0; max-width: 26em; color: var(--stil); }
+    .knoppen { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; margin-top: 6px; }
     .knop {
-      display: inline-flex; align-items: center; gap: 8px; margin-top: 6px; padding: 12px 22px; border-radius: 999px;
-      font-weight: 700; background: var(--water); color: #fff;
+      display: inline-flex; align-items: center; gap: 8px; padding: 12px 22px; border-radius: 999px;
+      font-weight: 700; text-decoration: none; background: var(--water); color: #fff; border: 2px solid var(--water);
     }
     @media (prefers-color-scheme: dark) { .knop { color: #0d2238; } }
-    .helft.actief:hover .knop, .helft.actief:focus-visible .knop { filter: brightness(1.08); }
-    .helft.actief:focus-visible { outline: 3px solid var(--water); outline-offset: -6px; }
+    .knop.tweede { background: transparent; color: var(--water); }
+    .knop:hover { filter: brightness(1.08); }
+    .knop.tweede:hover { background: var(--kaart); filter: none; }
+    .knop:focus-visible { outline: 3px solid var(--water); outline-offset: 3px; }
     .label {
       display: inline-block; margin-top: 6px; padding: 8px 18px; border-radius: 999px; font-weight: 700;
       border: 2px dashed var(--land); color: var(--land);
@@ -111,13 +114,16 @@
   </header>
 
   <main class="helften">
-    <a class="helft water actief" href="lelievlet/">
+    <section class="helft water" aria-labelledby="water-naam">
       <span class="soort">Water</span>
       <img class="beeld" src="img/lelievlet.png" alt="" width="320" height="320">
-      <h2>Lelievlet 3D</h2>
+      <h2 id="water-naam">Lelievlet 3D</h2>
       <p>De lelievlet in 3D. Leer de onderdelen, bekijk hoe de manoeuvres gaan en oefen ze stap voor stap.</p>
-      <span class="knop">Open Lelievlet 3D <span aria-hidden="true">→</span></span>
-    </a>
+      <div class="knoppen">
+        <a class="knop" href="lelievlet/app.html">Open app <span aria-hidden="true">→</span></a>
+        <a class="knop tweede" href="lelievlet/">Meer informatie</a>
+      </div>
+    </section>
 
     <section class="helft land" aria-labelledby="land-naam">
       <span class="soort">Land</span>
