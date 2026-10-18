@@ -12,17 +12,12 @@ ook voor de Pages-sites van de apps, die elk hun eigen repository houden. Zo sta
 `scoutvaardig.nl/lelievlet/` en `scoutvaardig.nl/scoutingtechnieken/`, en sturen de oude adressen op
 `wiebren.github.io` door.
 
-## Het domein aanzetten
+## Het domein
 
-Pas als de DNS van scoutvaardig.nl naar GitHub wijst, anders werken ook de apps niet meer:
-
-1. DNS: A-records `185.199.108.153`, `185.199.109.153`, `185.199.110.153`, `185.199.111.153`; AAAA-records
-   `2606:50c0:8000::153` t/m `2606:50c0:8003::153`; `www` als CNAME naar `wiebren.github.io`.
-2. Het domein verifiëren onder *Settings → Pages* van het account (TXT-record `_github-pages-challenge-wiebren`).
-3. Een bestand `CNAME` met `scoutvaardig.nl` toevoegen en pushen, of het domein zetten onder *Settings → Pages* van
-   deze repository; daarna *Enforce HTTPS*.
-
-Lokaal bekijken: `python3 -m http.server` in deze map, en dan <http://localhost:8000/>.
+`scoutvaardig.nl` staat onder *Settings → Pages* van deze repository (met *Enforce HTTPS*); met een workflow als
+bron is een bestand `CNAME` niet nodig. De DNS: A-records `185.199.108.153` t/m `185.199.111.153`, AAAA-records
+`2606:50c0:8000::153` t/m `2606:50c0:8003::153`, en `www` als CNAME naar `wiebren.github.io`. Haal je het domein hier
+weg, dan staan ook de apps weer op `wiebren.github.io`.
 
 ## Beelden
 
