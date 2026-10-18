@@ -51,11 +51,10 @@
       padding: calc(env(safe-area-inset-top) + 28px) 16px 0;
     }
     .kop h1 { margin: 0; font-size: clamp(30px, 5vw, 46px); font-weight: 800; letter-spacing: -0.02em; line-height: 1.1; }
-    /* the name changes colour exactly where the halves meet: the h1 is centred, so its middle is the split */
-    .kop h1 {
-      background: linear-gradient(90deg, var(--water) 50%, var(--land) 50%);
-      -webkit-background-clip: text; background-clip: text; color: transparent;
-    }
+    /* "Scout" ends and "vaardig" begins exactly where the halves meet: a column each, as wide as a half */
+    .kop h1 { align-self: stretch; display: grid; grid-template-columns: 1fr 1fr; }
+    .kop h1 span:first-child { color: var(--land); text-align: right; }
+    .kop h1 span:last-child { color: var(--water); text-align: left; }
     .kop p { margin: 6px 0 0; color: var(--stil); font-size: 16px; max-width: 34em; }
 
     /* the two halves: water left, land right; stacked on a phone */
@@ -98,10 +97,8 @@
       .helft { flex: 0 0 auto; min-height: 0; gap: 10px; padding: 24px 16px 28px; }
       .water { padding-top: 136px; }
       .land { flex-grow: 1; justify-content: flex-start; }
-      /* stacked, there is no split under the name: two colours by word */
-      .kop h1 { background: none; }
-      .kop h1 span:first-child { color: var(--land); }
-      .kop h1 span:last-child { color: var(--water); }
+      /* stacked, there is no split under the name: just centred */
+      .kop h1 { display: block; }
       .land { border-left: 0; border-top: 1px solid var(--lijn); }
       .beeld { width: min(132px, 36vw); }
     }
